@@ -2,13 +2,14 @@
 Summary:	Global File System 2 (GFS2) utilities
 Summary(pl.UTF-8):	Narzędzia do systemu plików GFS2 (Global File System 2)
 Name:		gfs2-utils
-Version:	3.1.6
+Version:	3.1.10
 Release:	1
 License:	LGPL v2.1+ (libraries), GPL v2+ (applications)
 Group:		Applications/System
-Source0:	https://fedorahosted.org/releases/g/f/gfs2-utils/%{name}-%{version}.tar.gz
-# Source0-md5:	9d47c272298c62868dd49c7b1f4bcefc
-URL:		https://fedorahosted.org/cluster/wiki/HomePage
+Source0:	http://releases.pagure.org/gfs2-utils/%{name}-%{version}.tar.xz
+# Source0-md5:	31d330b1f69da8474a52bf36a824e9c1
+Patch0:		%{name}-link.patch
+URL:		https://pagure.io/gfs2-utils
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison
@@ -16,11 +17,14 @@ BuildRequires:	flex
 BuildRequires:	gettext-devel >= 0.18
 BuildRequires:	libblkid-devel
 BuildRequires:	libtool >= 2:2.2.6
+BuildRequires:	libuuid-devel
 # for gfs2 headers
 BuildRequires:	linux-libc-headers >= 7:3.3
 BuildRequires:	ncurses-devel >= 5
 BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRequires:	zlib-devel
 Requires:	uname(release) >= 3.3
 Obsoletes:	gfs2 < 1:3
@@ -48,7 +52,8 @@ spójność - zmiany wykonane na jednej maszynie są natychmiast widoczne
 na wszystkich innych maszynach w klastrze.
 
 %prep
-%setup -q -n gfs2-utils
+%setup -q
+%patch0 -p1
 
 %{__sed} -i -e 's, po/Makefile.in$,,' configure.ac
 %{__sed} -i -e '1s,#!/usr/bin/env python,#!/usr/bin/python,' gfs2/scripts/gfs2_{lockcapture,trace}
@@ -61,7 +66,8 @@ na wszystkich innych maszynach w klastrze.
 %{__autoheader}
 %{__automake}
 %configure \
-	--disable-silent-rules
+	--disable-silent-rules \
+	--with-udevdir=/lib/udev
 
 %{__make}
 
@@ -70,6 +76,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT/sbin
+%{__mv} $RPM_BUILD_ROOT%{_sbindir}/{fsck.gfs2,mkfs.gfs2,gfs2_{grow,jadd,lockcapture,trace}} $RPM_BUILD_ROOT/sbin
 
 # packaged as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/gfs2-utils
@@ -88,7 +97,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /sbin/mkfs.gfs2
 %attr(755,root,root) %{_sbindir}/gfs2_convert
 %attr(755,root,root) %{_sbindir}/gfs2_edit
+%attr(755,root,root) %{_sbindir}/gfs2_withdraw_helper
+%attr(755,root,root) %{_sbindir}/glocktop
 %attr(755,root,root) %{_sbindir}/tunegfs2
+/lib/udev/rules.d/82-gfs2-withdraw.rules
 %{_mandir}/man5/gfs2.5*
 %{_mandir}/man8/fsck.gfs2.8*
 %{_mandir}/man8/gfs2_convert.8*
@@ -97,5 +109,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/gfs2_jadd.8*
 %{_mandir}/man8/gfs2_lockcapture.8*
 %{_mandir}/man8/gfs2_trace.8*
+%{_mandir}/man8/glocktop.8*
 %{_mandir}/man8/mkfs.gfs2.8*
 %{_mandir}/man8/tunegfs2.8*
