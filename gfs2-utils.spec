@@ -2,19 +2,19 @@
 Summary:	Global File System 2 (GFS2) utilities
 Summary(pl.UTF-8):	Narzędzia do systemu plików GFS2 (Global File System 2)
 Name:		gfs2-utils
-Version:	3.1.10
+Version:	3.5.1
 Release:	1
 License:	LGPL v2.1+ (libraries), GPL v2+ (applications)
 Group:		Applications/System
-Source0:	http://releases.pagure.org/gfs2-utils/%{name}-%{version}.tar.xz
-# Source0-md5:	31d330b1f69da8474a52bf36a824e9c1
-Patch0:		%{name}-link.patch
+Source0:	https://releases.pagure.org/gfs2-utils/%{name}-%{version}.tar.xz
+# Source0-md5:	b96b0eed06546da2ee73c3f373135ebf
 URL:		https://pagure.io/gfs2-utils
-BuildRequires:	autoconf >= 2.63
+BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison
+BuildRequires:	bzip2-devel
 BuildRequires:	flex
-BuildRequires:	gettext-devel >= 0.18
+BuildRequires:	gettext-devel >= 0.19
 BuildRequires:	libblkid-devel
 BuildRequires:	libtool >= 2:2.2.6
 BuildRequires:	libuuid-devel
@@ -53,10 +53,10 @@ na wszystkich innych maszynach w klastrze.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %{__sed} -i -e 's, po/Makefile.in$,,' configure.ac
-%{__sed} -i -e '1s,#!/usr/bin/env python,#!/usr/bin/python,' gfs2/scripts/gfs2_{lockcapture,trace}
+%{__sed} -i -e '1s,/usr/bin/python,%{__python3},' gfs2/scripts/gfs2_lockcapture
+%{__sed} -i -e '1s,/usr/bin/env python,%{__python3},' gfs2/scripts/gfs2_trace
 
 %build
 %{__gettextize}
@@ -97,9 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /sbin/mkfs.gfs2
 %attr(755,root,root) %{_sbindir}/gfs2_convert
 %attr(755,root,root) %{_sbindir}/gfs2_edit
-%attr(755,root,root) %{_sbindir}/gfs2_withdraw_helper
 %attr(755,root,root) %{_sbindir}/glocktop
 %attr(755,root,root) %{_sbindir}/tunegfs2
+%attr(755,root,root) %{_libexecdir}/gfs2_withdraw_helper
 /lib/udev/rules.d/82-gfs2-withdraw.rules
 %{_mandir}/man5/gfs2.5*
 %{_mandir}/man8/fsck.gfs2.8*
