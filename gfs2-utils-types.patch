@@ -1,0 +1,11 @@
+--- gfs2-utils-3.5.1/gfs2/libgfs2/crc32c.c.orig	2023-04-11 18:28:23.000000000 +0200
++++ gfs2-utils-3.5.1/gfs2/libgfs2/crc32c.c	2024-09-10 20:53:03.241907871 +0200
+@@ -57,7 +57,7 @@ static uint32_t crc32c_intel_le_hw_byte(
+  * Steps through buffer one byte at at time, calculates reflected 
+  * crc using table.
+  */
+-static uint32_t crc32c_intel(uint32_t crc, unsigned char const *data, unsigned long length)
++static uint32_t crc32c_intel(uint32_t crc, unsigned char const *data, size_t length)
+ {
+ 	unsigned int iquotient = length / SCALE_F;
+ 	unsigned int iremainder = length % SCALE_F;

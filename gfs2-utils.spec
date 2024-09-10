@@ -8,6 +8,7 @@ License:	LGPL v2.1+ (libraries), GPL v2+ (applications)
 Group:		Applications/System
 Source0:	https://releases.pagure.org/gfs2-utils/%{name}-%{version}.tar.xz
 # Source0-md5:	b96b0eed06546da2ee73c3f373135ebf
+Patch0:		%{name}-types.patch
 URL:		https://pagure.io/gfs2-utils
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.11
@@ -53,6 +54,7 @@ na wszystkich innych maszynach w klastrze.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %{__sed} -i -e 's, po/Makefile.in$,,' configure.ac
 %{__sed} -i -e '1s,/usr/bin/python,%{__python3},' gfs2/scripts/gfs2_lockcapture
