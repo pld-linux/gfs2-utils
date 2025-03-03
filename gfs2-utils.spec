@@ -2,12 +2,12 @@
 Summary:	Global File System 2 (GFS2) utilities
 Summary(pl.UTF-8):	Narzędzia do systemu plików GFS2 (Global File System 2)
 Name:		gfs2-utils
-Version:	3.5.1
+Version:	3.6.1
 Release:	1
 License:	LGPL v2.1+ (libraries), GPL v2+ (applications)
 Group:		Applications/System
 Source0:	https://releases.pagure.org/gfs2-utils/%{name}-%{version}.tar.xz
-# Source0-md5:	b96b0eed06546da2ee73c3f373135ebf
+# Source0-md5:	eedb3aceac018f8756f711f3727335ff
 Patch0:		%{name}-types.patch
 URL:		https://pagure.io/gfs2-utils
 BuildRequires:	autoconf >= 2.69
@@ -97,7 +97,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /sbin/gfs2_lockcapture
 %attr(755,root,root) /sbin/gfs2_trace
 %attr(755,root,root) /sbin/mkfs.gfs2
-%attr(755,root,root) %{_sbindir}/gfs2_convert
 %attr(755,root,root) %{_sbindir}/gfs2_edit
 %attr(755,root,root) %{_sbindir}/glocktop
 %attr(755,root,root) %{_sbindir}/tunegfs2
@@ -105,7 +104,6 @@ rm -rf $RPM_BUILD_ROOT
 /lib/udev/rules.d/82-gfs2-withdraw.rules
 %{_mandir}/man5/gfs2.5*
 %{_mandir}/man8/fsck.gfs2.8*
-%{_mandir}/man8/gfs2_convert.8*
 %{_mandir}/man8/gfs2_edit.8*
 %{_mandir}/man8/gfs2_grow.8*
 %{_mandir}/man8/gfs2_jadd.8*
