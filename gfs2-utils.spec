@@ -54,7 +54,7 @@ na wszystkich innych maszynach w klastrze.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %{__sed} -i -e 's, po/Makefile.in$,,' configure.ac
 %{__sed} -i -e '1s,/usr/bin/python,%{__python3},' gfs2/scripts/gfs2_lockcapture
